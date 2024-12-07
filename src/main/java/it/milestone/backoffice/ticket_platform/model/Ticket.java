@@ -1,8 +1,6 @@
 package it.milestone.backoffice.ticket_platform.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,9 +26,6 @@ public class Ticket {
     @Null
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private enumState state;
-
     public Integer getId() {
         return id;
     }
@@ -53,14 +48,6 @@ public class Ticket {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public enumState getState() {
-        return state;
-    }
-
-    public void setState(enumState state) {
-        this.state = state;
     }
 
 }
