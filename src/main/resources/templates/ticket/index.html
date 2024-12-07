@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments :: head}"></div>
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <h1 class="text-center">Dashboard Ticket</h1>
+
+        <div th:replace="~{fragments :: navbar}"></div>
+        <br>
+        <h3 class="text-center">List of Ticket</h3>
+        <br>
+        <div th:if="${!tickets.isEmpty()}">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            State
+                        </th>
+                        <th>
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td th:text="${ticket.title}"></td>
+                        <td th:text="${ticket.description}"></td>
+                        <td th:text="${ticket.state}"></td>
+                        <td>
+                            <!-- <a class="btn btn-primary" th:href="@{|/pizzeria/show/${pizza.id}|}">
+                                <i class="fas fa-pizza-slice"></i>
+                            </a> -->
+                        </td>
+                        <td>
+                            <!-- <a class="btn btn-primary" th:href="@{|/pizzeria/edit/${pizza.id}|}">
+                                <i class="fas fa-edit"></i>
+                            </a> -->
+                        </td>
+                        <td>
+                            <!-- <form action="#" th:action="@{|/pizzeria/delete/${pizza.id}|}" method="post">
+                                <button class="btn btn-danger" type="submit" id="delete-button"
+                                    onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${tickets.isEmpty()}" class="alert alert-warning" role="alert">
+            There aren't tickets!
+        </div>
+
+
+    </div>
+    <div th:replace="~{fragments :: script}"></div>
+</body>
+
+</html>
