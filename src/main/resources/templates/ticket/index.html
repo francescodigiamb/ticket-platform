@@ -28,6 +28,7 @@
                             State
                         </th>
                         <th>
+                            Operator
                         </th>
                         <th></th>
                         <th></th>
@@ -37,7 +38,7 @@
                     <tr th:each="ticket : ${tickets}">
                         <td th:text="${ticket.title}"></td>
                         <td th:text="${ticket.description}"></td>
-                        <td th:text="${ticket.state}"></td>
+                        <td th:text="${ticket.state}"> </td>
                         <td>
                             <!-- <a class="btn btn-primary" th:href="@{|/pizzeria/show/${pizza.id}|}">
                                 <i class="fas fa-pizza-slice"></i>
