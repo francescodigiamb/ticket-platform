@@ -38,12 +38,12 @@ public class Ticket {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "id_operator")
+    @JoinColumn(name = "operator_id")
     private User operator;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "id_category")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     private LocalDate date;

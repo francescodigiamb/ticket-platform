@@ -1,9 +1,12 @@
 package it.milestone.backoffice.ticket_platform.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +22,9 @@ public class Category {
     @NotNull(message = "The name of category can't be null")
     @NotBlank(message = "The name of category can't be empty")
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Ticket> tickets;
 
     public Integer getId() {
         return id;
