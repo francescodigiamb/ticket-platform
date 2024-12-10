@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.milestone.backoffice.ticket_platform.model.State;
 import it.milestone.backoffice.ticket_platform.model.Ticket;
 import it.milestone.backoffice.ticket_platform.repository.CategoryRepository;
 import it.milestone.backoffice.ticket_platform.repository.TicketRepository;
@@ -63,25 +64,31 @@ public class ControllerTicket {
         return "/ticket/show";
     }
 
+    // Metodo GET per visualizzare il form di creazione
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("ticket", new Ticket());
+        model.addAttribute("ticket", new Ticket()); // Inizializza l'oggetto ticket
         model.addAttribute("allCategory", catRepo.findAll());
         model.addAttribute("availableOperator", userRepo.findByAvailable(true));
-
+        model.addAttribute("states", State.values());
         return "/ticket/create";
     }
 
+    // Metodo POST per gestire l'invio del form
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult, Model model) {
 
+        // Se ci sono errori di validazione, torna al form
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allCategory", catRepo.findAll());
+            model.addAttribute("availableOperator", userRepo.findByAvailable(true));
             return "/ticket/create";
         }
 
+        // Salva il ticket nel database
         ticketRepo.save(formTicket);
 
+        // Reindirizza alla dashboard
         return "redirect:/dashboard";
     }
-
 }

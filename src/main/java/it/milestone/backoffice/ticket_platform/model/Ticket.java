@@ -43,7 +43,7 @@ public class Ticket {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     private LocalDate date;

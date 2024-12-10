@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <div th:replace="~{fragments :: head}"></div>
+    <title th:text="${tickets.title}"> </title>
+</head>
+
+<body>
+    <div class="d-flex align-items-start flex-column mb-3" style="height: 85vh;" th:object="${tickets}">
+        <div class="container mb-auto">
+            <br>
+            <div th:replace="~{fragments :: navbar}"></div>
+            <br>
+            <h1 th:text="*{title}"></h1>
+            <hr />
+            <div class="row">
+                <div class="col-8">
+                    <h4>Description</h4>
+                    <p th:text="*{description}"></p>
+                </div>
+                <div class="col-2">
+                    <h4>State</h4>
+                    <div th:text="*{state}"></div>
+                </div>
+                <div class="col-2">
+                    <h4>Operator</h4>
+                    <div th:text="*{operator.username}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: script}"></div>
+</body>
+
+</html>
