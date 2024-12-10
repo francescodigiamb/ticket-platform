@@ -1,51 +1,53 @@
-package it.milestone.backoffice.ticket_platform.security;
+// package it.milestone.backoffice.ticket_platform.security;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+// import
+// org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+// import
+// org.springframework.security.config.annotation.web.builders.HttpSecurity;
+// import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-public class SecurityConfiguration {
+// @Configuration
+// public class SecurityConfiguration {
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+// @Bean
+// SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests()
-                // .requestMatchers("/dashboard/create",
-                // "/dashboard/edit/**").hasAuthority("ADMIN")
-                // .requestMatchers(HttpMethod.POST, "/dashboard/**").hasAuthority("ADMIN")
-                // .requestMatchers("/tickets", "/tickets/**").hasAuthority("ADMIN")
-                .requestMatchers("/dashboard", "/dashboard/**").hasAnyAuthority("USER", "ADMIN")
-                .requestMatchers("/**").permitAll()
-                .and().formLogin()
-                .and().logout().and().exceptionHandling()
-                .and().csrf().disable();
+// http.authorizeHttpRequests()
+// // .requestMatchers("/dashboard/create",
+// // "/dashboard/edit/**").hasAuthority("ADMIN")
+// // .requestMatchers(HttpMethod.POST, "/dashboard/**").hasAuthority("ADMIN")
+// // .requestMatchers("/tickets", "/tickets/**").hasAuthority("ADMIN")
+// .requestMatchers("/dashboard", "/dashboard/**").hasAnyAuthority("USER",
+// "ADMIN")
+// .requestMatchers("/**").permitAll()
+// .and().formLogin()
+// .and().logout().and().exceptionHandling()
+// .and().csrf().disable();
 
-        return http.build();
-    }
+// return http.build();
+// }
 
-    @Bean
-    DatabaseUserDetailsService userDetailsService() {
-        return new DatabaseUserDetailsService();
-    }
+// @Bean
+// DatabaseUserDetailsService userDetailsService() {
+// return new DatabaseUserDetailsService();
+// }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+// @Bean
+// PasswordEncoder passwordEncoder() {
+// return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+// }
 
-    @Bean
-    DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+// @Bean
+// DaoAuthenticationProvider authenticationProvider() {
+// DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+// authProvider.setUserDetailsService(userDetailsService());
+// authProvider.setPasswordEncoder(passwordEncoder());
+// return authProvider;
 
-    }
+// }
 
-}
+// }
