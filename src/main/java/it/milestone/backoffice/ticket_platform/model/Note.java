@@ -24,12 +24,12 @@ public class Note {
     @NotBlank(message = "This field can't be empty")
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "id_author")
-    private User author;
+    @NotBlank
+    @NotNull
+    private String author;
 
     @ManyToOne
-    @JoinColumn(name = "id_ticket")
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
     private LocalDate creationDate = LocalDate.now();
@@ -50,11 +50,11 @@ public class Note {
         this.text = text;
     }
 
-    public User getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
