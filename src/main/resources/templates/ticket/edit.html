@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <div th:replace="~{fragments :: head}"></div>
+    <title>Edit Ticket </title>
+</head>
+
+<body>
+
+    <div class="d-flex align-items-start flex-column mb-3" style="height: 85vh;">
+        <div class="container mb-auto">
+            <br>
+            <div th:replace="~{fragments :: navbar}"></div>
+            <br>
+            <h1>Edit Ticket</h1>
+            <hr />
+
+            <form th:action="@{|/dashboard/edit/${ticket.id}|}" th:object="${ticket}" method="post" class="mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <!-- Titolo -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" id="title" th:field="*{title}" class="form-control" required
+                                th:errorClass="is-invalid" />
+                            <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Descrizione -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" th:field="*{description}" class="form-control" required
+                                th:errorClass="is-invalid" placeholder="Description"></textarea>
+                            <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Categoria -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select id="category" th:field="*{category}" class="form-select" required>
+
+                                <option th:each="cat : ${allCategory}" th:value="${cat.id}" th:text="${cat.name}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Operatore -->
+                        <div class="mb-3">
+                            <label for="operator" class="form-label">Operator</label>
+                            <select id="operator" th:field="*{operator}" class="form-select" required>
+
+                                <option th:each="op : ${availableOperator}" th:value="${op.id}"
+                                    th:text="${op.username}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Stato -->
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <select id="state" th:field="*{state}" class="form-select" required>
+                                <option value="" disabled selected>Select State</option>
+                                <option th:each="s : ${states}" th:value="${s}" th:text="${s}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('state')}" class="invalid-feedback">
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('state')}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 col-3">
+                    <!-- Pulsanti -->
+                    <button type="submit" class="btn btn-primary">Edit Ticket</button>
+                    <a type="submit" class="btn btn-danger" th:href="@{/dashboard}">Cancel</a>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <div th:replace="~{fragments :: script}"></div>
+</body>
+
+</html>

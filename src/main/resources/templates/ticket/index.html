@@ -35,6 +35,7 @@
                         </th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,24 +43,31 @@
                         <td th:text="${ticket.title}"></td>
                         <td th:text="${ticket.description}"></td>
                         <td th:text="${ticket.category}"></td>
-                        <td th:text="${ticket.state}"> </td>
+                        <td>
+                            <span th:text="${ticket.state}"
+                                th:class="'badge ' + (${ticket.state.name()} == 'To_do' ? 'bg-secondary' :
+                                                  (${ticket.state.name()} == 'In_progress' ? 'bg-warning' :
+                                                  (${ticket.state.name()} == 'Complete' ? 'bg-success' : 'bg-primary')))">
+                            </span>
+                        </td>
+                        <td th:text="${ticket.operator}"> </td>
                         <td>
                             <a class="btn btn-primary" th:href="@{|/dashboard/show/${ticket.id}|}">
                                 <i class="fa-solid fa-info"></i>
                             </a>
                         </td>
                         <td>
-                            <!-- <a class="btn btn-primary" th:href="@{|/pizzeria/edit/${pizza.id}|}">
+                            <a class="btn btn-primary" th:href="@{|/dashboard/edit/${ticket.id}|}">
                                 <i class="fas fa-edit"></i>
-                            </a> -->
+                            </a>
                         </td>
                         <td>
-                            <!-- <form action="#" th:action="@{|/pizzeria/delete/${pizza.id}|}" method="post">
+                            <form action="#" th:action="@{|/dashboard/delete/${ticket.id}|}" method="post">
                                 <button class="btn btn-danger" type="submit" id="delete-button"
                                     onclick="return confirm('Are you sure?')">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                            </form> -->
+                            </form>
                         </td>
                     </tr>
                 </tbody>

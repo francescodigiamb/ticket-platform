@@ -1,5 +1,6 @@
 package it.milestone.backoffice.ticket_platform.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.milestone.backoffice.ticket_platform.model.Note;
 import it.milestone.backoffice.ticket_platform.model.State;
 import it.milestone.backoffice.ticket_platform.model.Ticket;
 import it.milestone.backoffice.ticket_platform.repository.CategoryRepository;
@@ -91,4 +93,54 @@ public class ControllerTicket {
         // Reindirizza alla dashboard
         return "redirect:/dashboard";
     }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute("newNote", new Note());
+        model.addAttribute("ticket", ticketRepo.findById(id).get());
+        model.addAttribute("allCategory", catRepo.findAll());
+        model.addAttribute("availableOperator", userRepo.findByAvailable(true));
+        model.addAttribute("states", State.values());
+
+        return "/ticket/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute("ticket") Ticket formTicket,
+            BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/ticket/edit";
+        }
+
+        ticketRepo.save(formTicket);
+
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer id) {
+
+        ticketRepo.deleteById(id);
+
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/{id}/note")
+    public String newNote(@PathVariable("id") Integer id, Model model) {
+
+        // Recupera il ticket
+        Ticket ticket = ticketRepo.findById(id).get();
+
+        Note note = new Note();
+        note.setTicket(ticket);
+        note.setCreationDate(LocalDate.now());
+
+        model.addAttribute("ticketId", ticket.getId());
+        model.addAttribute("note", note);
+
+        return "note/create";
+    }
+
 }

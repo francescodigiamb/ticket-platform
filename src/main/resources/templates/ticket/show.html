@@ -15,7 +15,7 @@
             <h1 th:text="*{title}"></h1>
             <hr />
             <div class="row">
-                <div class="col-8">
+                <div class="col-6">
                     <h4>Description</h4>
                     <p th:text="*{description}"></p>
                 </div>
@@ -27,6 +27,50 @@
                     <h4>Operator</h4>
                     <div th:text="*{operator.username}"></div>
                 </div>
+            </div>
+        </div>
+
+        <div class="container" th:if="*{!notes.isEmpty()}">
+            <div class="card" th:each="note : ${tickets.notes}" style="width: 18rem;">
+                <div class="card-body">
+                    <h6 class="card-title" th:text="${note.creationDate}"></h6>
+                    <hr>
+                    <h5 class="card-subtitle mb-2 text-body-secondary" th:text="${note.author}"></h5>
+                    <p class="card-text" th:text="${note.text}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container py-3" th:if="*{notes.isEmpty()}">
+            <span> This ticket haven't a note</span>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <a class="btn btn-primary" th:href="@{/dashboard}" role="button">Back</a>
+            </div>
+
+            <!-- Pulsante per aggiungere una nuova nota -->
+            <div class="col-md-2">
+                <a th:href="@{/dashboard/{id}/note (id=${tickets.id})}" class="btn btn-primary">
+                    Add Note
+                </a>
+            </div>
+
+            <div class="col-md-2">
+                <a class="btn btn-primary" th:href="@{|/dashboard/edit/*{id}|}">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+            <div class="col-md-2">
+                <form action="#" th:action="@{|/dashboard/delete/*{id}|}" method="post">
+                    <button class="btn btn-danger" type="submit" id="delete-button"
+                        onclick="return confirm('Are you sure?')">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </form>
             </div>
         </div>
     </div>
