@@ -1,15 +1,11 @@
 package it.milestone.backoffice.ticket_platform.controller;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -51,4 +47,13 @@ public class ControllerNote {
 
         return "redirect:/dashboard/show/" + note.getTicket().getId();
     }
+
+    @PostMapping("/delete/{id}")
+    public String deleteNote(@PathVariable("id") Integer id) {
+
+        noteRepo.deleteById(id);
+
+        return "redirect:/dashboard";
+    }
+
 }

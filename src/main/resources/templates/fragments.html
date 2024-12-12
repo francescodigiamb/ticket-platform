@@ -16,14 +16,14 @@
     <!-- Navbar fragment -->
     <nav th:fragment="navbar" class="navbar navbar-expand-lg" style="background-color: #ebebeb;">
         <div class=" container-fluid d-flex">
-            <div>
+            <div class="px-2">
                 <a class="navbar-brand" th:href="@{/dashboard}">Home</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse px-2" id="navbarNav">
                 <ul class="navbar-nav">
 
                     <li class="nav-item">
@@ -40,11 +40,20 @@
                 </form>
             </div>
             <!-- Info Utente -->
-            <div>
-                Logged user: <span sec:authentication="name"></span>
-                Roles: <span sec:authentication="principal.authorities"></span>
-                <a class="btn btn-danger" href="/logout">Logout <i class="fas fa-sign-out"></i></a>
+
+            <div class="dropdown px-2" th:object="${user}">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    USER
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="@{|/dashboard/user/details|}"> User <span
+                                sec:authentication="name"></span></a></li>
+                    <li><a class="dropdown-item" href="#"> Available </a></li>
+                    <li><a class="btn btn-danger" href="/logout">Logout <i class="fas fa-sign-out"></i></a></li>
+                </ul>
             </div>
+
         </div>
     </nav>
 

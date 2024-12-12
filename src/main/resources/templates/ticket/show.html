@@ -30,14 +30,27 @@
             </div>
         </div>
 
-        <div class="container" th:if="*{!notes.isEmpty()}">
-            <div class="card" th:each="note : ${tickets.notes}" style="width: 18rem;">
-                <div class="card-body">
-                    <h6 class="card-title" th:text="${note.creationDate}"></h6>
-                    <hr>
-                    <h5 class="card-subtitle mb-2 text-body-secondary" th:text="${note.author}"></h5>
-                    <p class="card-text" th:text="${note.text}"></p>
+        <div class="container mb-auto" th:if="*{!notes.isEmpty()}">
+            <div class="row">
+                <div class="card" th:each="note : ${tickets.notes}" style="width: 18rem;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end">
+                            <form action="#" th:action="@{'/note/delete/{id}' (id=${note.id})}" th:field="${note.id}"
+                                method="post">
+                                <button class="btn btn-danger" type="submit" id="delete-button"
+                                    onclick="return confirm('Are you sure?')">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <hr>
+                        <h6 class="card-title" th:text="${note.creationDate}"></h6>
+                        <hr>
+                        <h5 class="card-subtitle mb-2 text-body-secondary" th:text="${note.author}"></h5>
+                        <p class="card-text" th:text="${note.text}"></p>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -46,7 +59,7 @@
         </div>
 
     </div>
-    <div class="container">
+    <div class="container mb-auto">
         <div class="row">
             <div class="col-md-2">
                 <a class="btn btn-primary" th:href="@{/dashboard}" role="button">Back</a>
