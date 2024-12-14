@@ -35,9 +35,9 @@
                         <td th:text="${ticket.category}"></td>
                         <td>
                             <span th:text="${ticket.state}"
-                                th:class="'badge ' + (${ticket.state.name()} == 'To_do' ? 'bg-secondary' :
-                                                  (${ticket.state.name()} == 'In_progress' ? 'bg-warning' :
-                                                  (${ticket.state.name()} == 'Complete' ? 'bg-success' : 'bg-primary')))">
+                                th:class="'badge ' + (${ticket.state.name()} == 'TO_DO' ? 'bg-secondary' :
+                                                  (${ticket.state.name()} == 'IN_PROGRESS' ? 'bg-warning' :
+                                                  (${ticket.state.name()} == 'COMPLETE' ? 'bg-success' : 'bg-primary')))">
                             </span>
                         </td>
                         <td th:text="${ticket.operator}"> </td>

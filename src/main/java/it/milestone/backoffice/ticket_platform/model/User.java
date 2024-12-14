@@ -2,7 +2,7 @@ package it.milestone.backoffice.ticket_platform.model;
 
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
@@ -25,7 +25,6 @@ public class User {
     private String password;
 
     @NotNull
-    @AssertTrue
     private boolean available;
 
     @ManyToMany(fetch = FetchType.EAGER)

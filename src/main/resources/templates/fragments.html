@@ -44,12 +44,12 @@
             <div class="dropdown px-2" th:object="${user}">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    USER
+                    <span sec:authentication="name"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="@{|/dashboard/user/details|}"> User <span
-                                sec:authentication="name"></span></a></li>
-                    <li><a class="dropdown-item" href="#"> Available </a></li>
+                    <li><a class="dropdown-item" th:href="@{|/user/details/${user.id}|}"> Profile </a>
+                    </li>
+
                     <li><a class="btn btn-danger" href="/logout">Logout <i class="fas fa-sign-out"></i></a></li>
                 </ul>
             </div>
