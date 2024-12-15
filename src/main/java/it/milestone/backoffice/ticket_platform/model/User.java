@@ -19,6 +19,7 @@ public class User {
     private Integer id;
 
     @NotNull
+    @Email
     private String username;
 
     @NotNull
