@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.milestone.backoffice.ticket_platform.model.Note;
 import it.milestone.backoffice.ticket_platform.model.State;
 import it.milestone.backoffice.ticket_platform.model.Ticket;
+import it.milestone.backoffice.ticket_platform.model.User;
 import it.milestone.backoffice.ticket_platform.repository.CategoryRepository;
 import it.milestone.backoffice.ticket_platform.repository.TicketRepository;
 import it.milestone.backoffice.ticket_platform.repository.UserRepository;
@@ -41,22 +45,59 @@ public class ControllerTicket {
     @GetMapping
     public String index(Model model, @RequestParam(name = "keyword", required = false) String keyword) {
 
-        List<Ticket> allTickets;
+        // Recupera l'utente loggato dal contesto di sicurezza
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
-        if (keyword != null && !keyword.isBlank()) {
-            allTickets = ticketRepo.findByTitleContainingIgnoreCase(keyword);
-            model.addAttribute("keyword", keyword);
-        } else {
-            allTickets = ticketRepo.findAll();
+        // Recupera l'utente dal repository
+        Optional<User> optionalUser = userRepo.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found for username: " + username);
         }
 
-        model.addAttribute("tickets", allTickets);
+        List<Ticket> tickets = null;
 
-        return "/ticket/index";
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            if (keyword != null && !keyword.isBlank()) {
+                tickets = ticketRepo.findByTitleContainingIgnoreCase(keyword);
+                model.addAttribute("keyword", keyword);
+            } else {
+                tickets = ticketRepo.findAll();
+            }
+        } else {
+            if (keyword != null && !keyword.isBlank()) {
+                tickets = ticketRepo.findByOperatorUsernameAndTitleContainingIgnoreCase(
+                        optionalUser.get().getUsername(),
+                        keyword);
+                model.addAttribute("keyword", keyword);
+            } else {
+                tickets = ticketRepo.findByOperator(optionalUser.get());
+            }
+
+        }
+
+        User user = optionalUser.get();
+        model.addAttribute("user", user);
+
+        model.addAttribute("tickets", tickets);
+
+        return "ticket/index";
     }
 
     @GetMapping("/show/{id}")
     public String show(@PathVariable("id") Integer id, Model model) {
+        // Recupera l'utente loggato dal contesto di sicurezza
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Recupera l'utente dal repository
+        Optional<User> optionalUser = userRepo.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found for username: " + username);
+        }
+
+        User user = optionalUser.get();
+        model.addAttribute("user", user);
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
         if (ticketOptional.isPresent()) {
@@ -66,10 +107,25 @@ public class ControllerTicket {
         return "/ticket/show";
     }
 
-    // Metodo GET per visualizzare il form di creazione
+    // Metodo GET per visualizzare il form di create
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("ticket", new Ticket()); // Inizializza l'oggetto ticket
+
+        // Recupera l'utente loggato dal contesto di sicurezza
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Recupera l'utente dal repository
+        Optional<User> optionalUser = userRepo.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found for username: " + username);
+        }
+
+        User user = optionalUser.get();
+        model.addAttribute("user", user);
+
+        // Inizializza l'oggetto ticket
+        model.addAttribute("ticket", new Ticket());
         model.addAttribute("allCategory", catRepo.findAll());
         model.addAttribute("availableOperator", userRepo.findByAvailable(true));
         model.addAttribute("states", State.values());
@@ -86,16 +142,28 @@ public class ControllerTicket {
             model.addAttribute("availableOperator", userRepo.findByAvailable(true));
             return "/ticket/create";
         }
-
         // Salva il ticket nel database
         ticketRepo.save(formTicket);
-
         // Reindirizza alla dashboard
         return "redirect:/dashboard";
     }
 
+    // Metodo GET per visualizzare il form di edit
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
+
+        // Recupera l'utente loggato dal contesto di sicurezza
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Recupera l'utente dal repository
+        Optional<User> optionalUser = userRepo.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found for username: " + username);
+        }
+
+        User user = optionalUser.get();
+        model.addAttribute("user", user);
 
         model.addAttribute("newNote", new Note());
         model.addAttribute("ticket", ticketRepo.findById(id).get());
@@ -106,10 +174,11 @@ public class ControllerTicket {
         return "/ticket/edit";
     }
 
+    // Metodo POST per gestire il fomr della Edit
     @PostMapping("/edit/{id}")
     public String update(@Valid @ModelAttribute("ticket") Ticket formTicket,
             BindingResult bindingResult, Model model) {
-
+        // Solito controllo per gli errori di validazine
         if (bindingResult.hasErrors()) {
             return "/ticket/edit";
         }
@@ -119,6 +188,7 @@ public class ControllerTicket {
         return "redirect:/dashboard";
     }
 
+    // Metdo POST per gestire la Delete
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 
@@ -127,8 +197,22 @@ public class ControllerTicket {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("/{id}/note")
+    // Metodo GET per le Note
+    @GetMapping("/note/{id}")
     public String newNote(@PathVariable("id") Integer id, Model model) {
+
+        // Recupera l'utente loggato dal contesto di sicurezza
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Recupera l'utente dal repository
+        Optional<User> optionalUser = userRepo.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found for username: " + username);
+        }
+
+        User user = optionalUser.get();
+        model.addAttribute("user", user);
 
         // Recupera il ticket
         Ticket ticket = ticketRepo.findById(id).get();
