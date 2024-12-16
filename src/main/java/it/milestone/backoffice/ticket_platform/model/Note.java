@@ -26,8 +26,8 @@ public class Note {
     @NotBlank(message = "This field can't be empty")
     private String text;
 
-    @NotBlank
-    @NotNull
+    @NotNull(message = "This field can't be null")
+    @NotBlank(message = "This field can't be empty")
     private String author;
 
     @ManyToOne

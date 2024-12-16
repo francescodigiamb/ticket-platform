@@ -1,5 +1,7 @@
 package it.milestone.backoffice.ticket_platform.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +44,7 @@ public class ControllerNote {
 
         // Associa il ticket alla nota
         note.setTicket(ticket);
+        note.setCreationDate(LocalDate.now());
 
         noteRepo.save(note);
 
