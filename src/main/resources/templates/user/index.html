@@ -46,7 +46,12 @@
                 <li class="list-group-item" th:each="ticket : ${tickets}">
                     <strong>Ticket ID:</strong> <span th:text="${ticket.id}"></span> |
                     <strong>Title:</strong> <span th:text="${ticket.Title}"></span>
-                    <strong>Stato:</strong> <span th:text="${ticket.state}"></span>
+                    <strong>Stato:</strong> <span th:text="${ticket.state}" th:class="'badge ' + (${ticket.state.name()} == 'TO_DO' ? 'bg-secondary' :
+                    (${ticket.state.name()} == 'IN_PROGRESS' ? 'bg-warning' :
+                    (${ticket.state.name()} == 'COMPLETE' ? 'bg-success' : 'bg-primary')))"></span>
+                    <a class="btn btn-primary" th:href="@{|/user/editstate/${ticket.id}|}">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </li>
             </ul>
         </div>

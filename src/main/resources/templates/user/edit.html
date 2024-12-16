@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <div th:replace="~{fragments :: head}"></div>
+    <title>Edit State Ticket </title>
+</head>
+
+<body>
+
+    <div class="d-flex align-items-start flex-column mb-3" style="height: 85vh;">
+        <div class="container mb-auto">
+
+            <br>
+            <h1>Edit State Ticket</h1>
+            <hr />
+
+            <form th:action="@{|/user/editstate/${ticket.id}|}" th:object="${ticket}" method="post" class="mb-4">
+                <input type="hidden" th:field="*{id}" />
+                <div class="row">
+                    <div class="col-3">
+
+                        <!-- Stato -->
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <select id="state" th:field="*{state}" class="form-select" required>
+                                <option value="" disabled selected>Select State</option>
+                                <option th:each="s : ${states}" th:value="${s}" th:text="${s}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('state')}" class="invalid-feedback">
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('state')}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 col-3">
+                    <!-- Pulsanti -->
+                    <button type="submit" class="btn btn-primary">Edit State</button>
+                    <a type="submit" class="btn btn-danger" th:href="@{/dashboard}">Cancel</a>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <div th:replace="~{fragments :: script}"></div>
+</body>
+
+</html>

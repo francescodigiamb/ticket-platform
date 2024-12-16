@@ -1,6 +1,5 @@
 package it.milestone.backoffice.ticket_platform.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +106,7 @@ public class ControllerTicket {
         return "/ticket/show";
     }
 
-    // Metodo GET per visualizzare il form di create
+    // Metodo GET per visualizzare il form di create del ticket
     @GetMapping("/create")
     public String create(Model model) {
 
@@ -124,7 +123,7 @@ public class ControllerTicket {
         User user = optionalUser.get();
         model.addAttribute("user", user);
 
-        // Inizializza l'oggetto ticket
+        // Inizializzo l'oggetto ticket
         model.addAttribute("ticket", new Ticket());
         model.addAttribute("allCategory", catRepo.findAll());
         model.addAttribute("availableOperator", userRepo.findByAvailable(true));
@@ -132,7 +131,7 @@ public class ControllerTicket {
         return "/ticket/create";
     }
 
-    // Metodo POST per gestire l'invio del form
+    // Metodo POST per gestire l'invio del form del ticket
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult, Model model) {
 
@@ -219,7 +218,6 @@ public class ControllerTicket {
 
         Note note = new Note();
         note.setTicket(ticket);
-        note.setCreationDate(LocalDate.now());
 
         model.addAttribute("ticketId", ticket.getId());
         model.addAttribute("note", note);
