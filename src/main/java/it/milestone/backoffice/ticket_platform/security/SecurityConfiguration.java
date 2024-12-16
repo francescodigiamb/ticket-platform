@@ -17,10 +17,9 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests()
                 .requestMatchers("/dashboard/create").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/dashboard/create", "/dashboard/delete/**")
+                .requestMatchers(HttpMethod.POST, "/dashboard/create", "/dashboard/edit/**",
+                        "/dashboard/delete/**")
                 .hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/dashboard/edit/**")
-                .hasAnyAuthority("OPERATOR", "ADMIN")
                 .requestMatchers("/dashboard", "/dashboard/**").hasAnyAuthority("OPERATOR",
                         "ADMIN")
                 .requestMatchers("/**").permitAll()
