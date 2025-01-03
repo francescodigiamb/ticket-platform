@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <div th:replace="~{fragments :: head}"></div>
+    <title>Creation Operator </title>
+</head>
+
+<body>
+
+    <div class="d-flex align-items-start flex-column mb-3" style="height: 85vh;">
+        <div class="container mb-auto">
+            <br>
+            <h1>New Operator</h1>
+            <hr />
+            <form th:action="@{/user/create}" th:object="${user}" method="post" class="mb-4">
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="usernameform" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="usernameform" th:field="*{username}"
+                        placeholder="name@example.it" required th:errorClass="is-invalid" />
+                    <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Password -->
+                <div class="mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" th:field="*{password}" required
+                        th:errorClass="is-invalid">
+                    <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                    <label> Stato Personale:
+                        <select name="status" th:field="*{available}">
+                            <option value="true" th:selected="${user.isAvailable()}">Attivo</option>
+                            <option value="false" th:selected="${!user.isAvailable()}">Non Attivo</option>
+                        </select>
+                    </label>
+
+                    <!-- Pulsanti -->
+                    <div>
+                        <button type="submit" class="btn btn-primary">Add Operator</button>
+                        <a type="submit" class="btn btn-danger" th:href="@{/dashboard}">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: script}"></div>
+</body>
+
+</html>
